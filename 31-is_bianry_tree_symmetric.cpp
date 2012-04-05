@@ -1,4 +1,4 @@
-#include "./bst.h"
+#include "./binary_tree.h"
 
 #include <iostream>
 #include <iomanip>
@@ -20,11 +20,11 @@ bool is_simmetric(node_type *node) {
 }
 
 int main() {
-	auto balanced = build_balanced_tree();
+	auto balanced = build_balanced_binary_tree();
 	cout << boolalpha << "simmetric = " << is_simmetric(balanced.get())
 		<< endl;
 
-	auto unbalanced = build_unbalanced_tree();
+	auto unbalanced = build_unbalanced_binary_tree();
 	cout << boolalpha << "simmetric = " << is_simmetric(unbalanced.get())
 		<< endl;
 

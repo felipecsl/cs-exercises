@@ -1,4 +1,4 @@
-#include "./bst.h"
+#include "./binary_tree.h"
 
 #include <iostream>
 
@@ -15,11 +15,11 @@ size_t binary_tree_depth(node_type *node) {
 }
 
 int main() {
-	auto balanced = build_balanced_tree();
+	auto balanced = build_balanced_binary_tree();
 	cout << "depth = " << binary_tree_depth(balanced.get())
 		<< endl;
 
-	auto unbalanced = build_unbalanced_tree();
+	auto unbalanced = build_unbalanced_binary_tree();
 	cout << "depth = " << binary_tree_depth(unbalanced.get())
 		<< endl;
 

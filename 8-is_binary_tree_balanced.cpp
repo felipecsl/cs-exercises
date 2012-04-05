@@ -1,4 +1,4 @@
-#include "./bst.h"
+#include "./binary_tree.h"
 
 #include <iostream>
 #include <iomanip>
@@ -33,12 +33,12 @@ bool is_binary_tree_balanced(node_type *node) {
 }
 
 int main() {
-	auto balanced = build_balanced_tree();
+	auto balanced = build_balanced_binary_tree();
 	cout << "balanced = " << boolalpha
 		<< is_binary_tree_balanced(balanced.get())
 		<< endl;
 
-	auto unbalanced = build_unbalanced_tree();
+	auto unbalanced = build_unbalanced_binary_tree();
 	cout << "unbalanced = " << boolalpha
 		<< is_binary_tree_balanced(unbalanced.get())
 		<< endl;
