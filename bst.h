@@ -1,11 +1,16 @@
 #ifndef INCLUDED__bst_h
 #define INCLUDED__bst_h
 
-#include <memory>
-#include <algorithm>
-#include <iostream>
+#pragma message "\n\
+\n\
+******************************************\n\
+THIS CODE SHOULD NOT be used in production\n\
+it's very limited and NOT EXCEPTION SAFE\n\
+it's only intended for exercising purposes\n\
+******************************************\n\
+"
 
-#include <cassert>
+#include <memory>
 
 using namespace std;
 

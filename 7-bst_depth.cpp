@@ -1,5 +1,8 @@
-#include "./base.h"
 #include "./bst.h"
+
+#include <iostream>
+
+using namespace std;
 
 template <typename node_type>
 size_t binary_tree_depth(node_type *node) {

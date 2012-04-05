@@ -1,24 +1,12 @@
-#include "./base.h"
+#include "./color.h"
+#include "./matrix.h"
 
-class color {
-	unsigned value;
-public:
-	color(unsigned argb):
-		value(argb)
-	{
-	}
+#include <utility>
+#include <stack>
 
-	color(unsigned char r, unsigned char g, unsigned char b, unsigned char a = 0xff):
-		value((r << 16) | (g << 8) | b | (a << 24))
-	{
-	}
+#include <cassert>
 
-	static constexpr color black() { return color(0xff000000); }
-	static constexpr color red() { return color(0xffff0000); }
-	static constexpr color green() { return color(0xff00ff00); }
-	static constexpr color blue() { return color(0xff0000ff); }
-	static constexpr color white() { return color(0xffffffff); }
-};
+using namespace std;
 
 class bitmap_paint {
 	typedef matrix<color> bitmap_type;
@@ -40,7 +28,7 @@ private:
 		if(y < bitmap.height() - 1 && pick(x, y + 1) == bg) recursive_flood_fill(x, y + 1, c, bg);
 	}
 
-	void recursive_flood_fill(matrix<bool> mark, dimension x, dimension y, color c, color bg) {
+	void recursive_edge_fill(matrix<bool> mark, dimension x, dimension y, color c, color bg) {
 		mark(x, y) = true;
 
 		if(pick(x, y) != bg) {
@@ -63,7 +51,7 @@ public:
 	void point(dimension x, dimension y, color c) { bitmap(x, y) = c; }
 	color const pick(dimension x, dimension y) const { return bitmap(x, y); }
 
-	void flood_fill(dimension x, dimension y, dimension color c, bool recursive = false) {
+	void flood_fill(dimension x, dimension y, color c, bool recursive = false) {
 		assert(x < bitmap.width() && y < bitmap.height());
 
 		auto bg = bitmap(x, y);
@@ -91,7 +79,7 @@ public:
 		}
 	}
 
-	void edge_fill(dimension x, dimension y, dimension color c) {
+	void edge_fill(dimension x, dimension y, color c, bool recursive = false) {
 		assert(x < bitmap.width() && y < bitmap.height());
 
 		auto bg = bitmap(x, y);
@@ -125,10 +113,7 @@ public:
 	}
 };
 
-static int test1 = add_test("flood_fill", [](){
-});
-
 int main() {
-	test_suite::singleton()
-		.run();
+	// TODO: Implement test case
+	return 0;
 }

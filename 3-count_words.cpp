@@ -1,4 +1,7 @@
-#include "./base.h"
+#include <unordered_set>
+#include <iostream>
+
+using namespace std;
 
 class word_counter {
 	unordered_set<char> letter;

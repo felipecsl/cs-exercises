@@ -1,5 +1,9 @@
-#include "./base.h"
 #include "./bst.h"
+
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
 
 template <typename node_type>
 bool is_simmetric(node_type *left, node_type *right) {

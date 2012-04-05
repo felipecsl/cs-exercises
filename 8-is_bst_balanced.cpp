@@ -1,5 +1,9 @@
-#include "./base.h"
 #include "./bst.h"
+
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
 
 template <typename node_type>
 bool is_binary_tree_balanced(node_type *node, size_t &left, size_t &right) {

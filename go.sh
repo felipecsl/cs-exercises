@@ -1,5 +1,6 @@
 #!/bin/sh
 
+clear
 set -e
 
 if [ ! -f "$1" ]; then
