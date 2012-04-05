@@ -11,13 +11,12 @@ it's only intended for exercising purposes\n\
 "
 
 #include <memory>
-
-using namespace std;
+#include <algorithm>
 
 template <typename T>
 class bt_node {
-	unique_ptr<bt_node> l;
-	unique_ptr<bt_node> r;
+	std::unique_ptr<bt_node> l;
+	std::unique_ptr<bt_node> r;
 	T v;
 
 public:
@@ -26,6 +25,11 @@ public:
 		r(right),
 		v(value)
 	{
+	}
+
+	void swap_children() {
+		using namespace std;
+		swap(l, r);
 	}
 
 	bt_node const *left() const { return l.get(); }
@@ -46,8 +50,8 @@ public:
 	T &value() { return v; }
 };
 
-unique_ptr<bt_node<int>> build_balanced_binary_tree() {
-	return unique_ptr<bt_node<int>>(
+std::unique_ptr<bt_node<int>> build_balanced_binary_tree() {
+	return std::unique_ptr<bt_node<int>>(
 		new bt_node<int>(4,
 			new bt_node<int>(2,
 				new bt_node<int>(1),
@@ -61,8 +65,8 @@ unique_ptr<bt_node<int>> build_balanced_binary_tree() {
 	);
 }
 
-unique_ptr<bt_node<int>> build_unbalanced_binary_tree() {
-	return unique_ptr<bt_node<int>>(
+std::unique_ptr<bt_node<int>> build_unbalanced_binary_tree() {
+	return std::unique_ptr<bt_node<int>>(
 		new bt_node<int>(2,
 			new bt_node<int>(7,
 				new bt_node<int>(2),
