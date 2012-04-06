@@ -11,7 +11,7 @@ fi
 bname="`basename "$1" .cpp`.bin"
 iname="`basename "$1" .cpp`.input"
 
-g++ -Wall -std=c++0x -o "$bname" "$1" 2>&1 | more
+g++ -Wall -std=c++0x -O0 -g -o "$bname" "$1" 2>&1 | more
 
 set +e
 if [ -x "$bname" ]; then
