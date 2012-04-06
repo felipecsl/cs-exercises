@@ -11,8 +11,9 @@ it's only intended for exercising purposes\n\
 ******************************************\n\
 "
 
-#include <initializer_list>
-#include <stdexcept>
+#include <memory>
+
+#include <cstdlib>
 
 template <typename T>
 class sl_node {
@@ -22,20 +23,8 @@ class sl_node {
 public:
 	sl_node(T const &value, sl_node *next = 0):
 		n(next),
-		v(v)
+		v(value)
 	{
-	}
-
-	sl_node(std::initializer_list<T> list):
-		n(0),
-		v(*std::begin(list))
-	{
-		sl_node *node = this;
-
-		for(auto i = std::begin(list); i != std::end(list); ++i) {
-			node->n = new sl_node(*i);
-			node = node->n;
-		}
 	}
 
 	~sl_node() {
@@ -49,5 +38,23 @@ public:
 	T const &value() const { return v; }
 	T &value() { return v; }
 };
+
+using namespace std;
+std::unique_ptr<sl_node<int>> build_slist(size_t n, int ubound = 100) {
+	if(!n) {
+		return std::unique_ptr<sl_node<int>>();
+	}
+	std::unique_ptr<sl_node<int>> head(
+		new sl_node<int>(std::rand() % ubound)
+	);
+
+	for(auto node = head.get(); --n; node = node->next()) {
+		node->next(
+			new sl_node<int>(std::rand() % ubound)
+		);
+	}
+
+	return head;
+}
 
 #endif // INCLUDED__slist_h
