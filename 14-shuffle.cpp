@@ -1,4 +1,5 @@
 #include "./14-shuffle.h"
+#include "./random.h"
 
 #include <iostream>
 #include <vector>
@@ -10,7 +11,7 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-	srand(time(0));
+	cout << "Seed: " << seed_random(argc > 2 ? atoi(argv[2]) : 0) << endl;
 
 	vector<int> v(argc > 1 ? atoi(argv[1]) : 10);
 

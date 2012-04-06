@@ -1,4 +1,5 @@
 #include "./14-shuffle.h"
+#include "./random.h"
 
 #include <iostream>
 #include <vector>
@@ -25,7 +26,7 @@ iterator find_duplicate(iterator begin, iterator end) {
 }
 
 int main(int argc, char **argv) {
-	srand(time(0));
+	cout << "Seed: " << seed_random(argc > 2 ? atoi(argv[2]) : 0) << endl;
 
 	vector<int> v(argc > 1 ? atoi(argv[1]) : 10);
 
@@ -58,4 +59,6 @@ int main(int argc, char **argv) {
 	else {
 		cout << "Duplicated element: " << *i << endl;
 	}
+
+	return 0;
 }
