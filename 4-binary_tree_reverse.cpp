@@ -7,10 +7,12 @@ template <typename node_type>
 void reverse_binary_tree(node_type *node) {
 	if(!node) return;
 
-	node->swap_children();
-
 	reverse_binary_tree(node->left());
 	reverse_binary_tree(node->right());
+
+	node_type *tmp = node->left();
+	node->left(node->right());
+	node->right(tmp);
 }
 
 int main() {

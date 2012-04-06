@@ -6,17 +6,17 @@
 ******************************************\n\
 THIS CODE SHOULD NOT be used in production\n\
 it's very limited and NOT EXCEPTION SAFE\n\
+it may also contain UNDEFINED BEHAVIOR\n\
 it's only intended for exercising purposes\n\
 ******************************************\n\
 "
 
 #include <memory>
-#include <algorithm>
 
 template <typename T>
 class bt_node {
-	std::unique_ptr<bt_node> l;
-	std::unique_ptr<bt_node> r;
+	bt_node *l;
+	bt_node *r;
 	T v;
 
 public:
@@ -27,24 +27,18 @@ public:
 	{
 	}
 
-	void swap_children() {
-		using namespace std;
-		swap(l, r);
+	~bt_node() {
+		delete l;
+		delete r;
 	}
 
-	bt_node const *left() const { return l.get(); }
-	bt_node *left() { return l.get(); }
-	bt_node *left(bt_node *left) {
-		l.reset(left);
-		return left;
-	}
+	bt_node const *left() const { return l; }
+	bt_node *left() { return l; }
+	bt_node *left(bt_node *left) { return l = left; }
 
-	bt_node const *right() const { return r.get(); }
-	bt_node *right() { return r.get(); }
-	bt_node *right(bt_node *right) {
-		r.reset(right);
-		return right;
-	}
+	bt_node const *right() const { return r; }
+	bt_node *right() { return r; }
+	bt_node *right(bt_node *right) { return r = right; }
 
 	T const &value() const { return v; }
 	T &value() { return v; }
