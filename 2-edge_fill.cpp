@@ -9,17 +9,18 @@ using namespace std;
 
 struct edge_fill {
 	typedef bitmap_paint bitmap_type;
-	typedef bitmap_type::color color;
+	typedef bitmap_type::color_type color_type;
 	typedef bitmap_type::dimension dimension;
+	typedef bitmap_type::coord coord;
 
 private:
 	bitmap_type &bitmap;
 
-	void recursive_fill(matrix<bool> mark, dimension x, dimension y, color c, color bg) {
+	void recursive_fill(matrix<bool> mark, dimension x, dimension y, color_type c, color_type bg) {
 		mark(x, y) = true;
 
-		if(pick(x, y) != bg) {
-			dot(x, y, c);
+		if(bitmap.pick(x, y) != bg) {
+			bitmap.dot(x, y, c);
 			return;
 		}
 
@@ -35,10 +36,10 @@ public:
 	{
 	}
 
-	void fill(dimension x, dimension y, color c, bool recursive = false) {
+	void fill(dimension x, dimension y, color_type c, bool recursive = false) {
 		assert(x < bitmap.width() && y < bitmap.height());
 
-		auto bg = bitmap(x, y);
+		auto bg = bitmap.pick(x, y);
 
 		matrix<bool> mark(bitmap.width(), bitmap.height(), false);
 
@@ -57,8 +58,8 @@ public:
 
 			mark(x, y) = true;
 
-			if(pick(x, y) != bg) {
-				dot(x, y, c);
+			if(bitmap.pick(x, y) != bg) {
+				bitmap.dot(x, y, c);
 			}
 
 			if(x > 0 && !mark(x - 1, y)) s.push(make_pair(x - 1, y));
