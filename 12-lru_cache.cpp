@@ -6,7 +6,7 @@
 using namespace std;
 
 string query_value(int key) {
-	cout << "Key " << key << " not found, enter its value: ";
+	cout << "Cache MISS for key " << key << ", enter its value: ";
 	string s;
 	cin >> s;
 	cout << endl;
@@ -35,4 +35,10 @@ int main(int argc, char **argv) {
 		}
 		cout << endl;
 	}
+
+	cout << "Cache statistics: "
+		<< cache.hits() << " hits, "
+		<< cache.misses() << " misses, "
+		<< (cache.hit_ratio() * 100) << "% hit ratio"
+		<< endl;
 }

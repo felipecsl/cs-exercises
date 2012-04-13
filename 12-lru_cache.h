@@ -24,12 +24,16 @@ private:
 	std::unordered_map<key_type, typename list_type::iterator> map;
 	size_type c;
 	std::function<value_type(key_type)> query;
+	unsigned hit;
+	unsigned miss;
 
 public:
 	template <typename query_type>
 	lru_cache(size_type capacity, query_type query):
 		c(capacity),
-		query(query)
+		query(query),
+		hit(0),
+		miss(0)
 	{
 		assert(capacity);
 	}
@@ -38,6 +42,8 @@ public:
 		auto i = map.find(key);
 
 		if(i == map.end()) {
+			++miss;
+
 			if(cache.size() == c) {
 				map.erase(cache.back().first);
 				cache.pop_back();
@@ -53,6 +59,7 @@ public:
 			map[key] = cache.begin();
 		}
 		else {
+			++hit;
 			cache.splice(cache.begin(), cache, i->second);
 		}
 
@@ -66,6 +73,14 @@ public:
 
 	size_type const size() const { return cache.size(); }
 	size_type const capacity() const { return c; }
+
+	unsigned hits() const { return hit; }
+	unsigned misses() const { return miss; }
+	double hit_ratio() const { return static_cast<double>(hit) / (hit + miss); }
+
+	void reset() {
+		hit = miss = 0;
+	}
 };
 
 #endif // INCLUDED__lru_cache_h
