@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <cassert>
+
 template <typename T>
 class matrix {
 	typedef std::vector<T> array_type;
@@ -24,10 +26,16 @@ public:
 	}
 
 	reference operator()(size_type const x, size_type const y) {
+		assert(x >= 0 && x < w);
+		assert(y >= 0 && y < h);
+
 		return m[y * w + x];
 	}
 
 	const_reference operator()(size_type const x, size_type const y) const {
+		assert(x >= 0 && x < w);
+		assert(y >= 0 && y < h);
+
 		return m[y * w + x];
 	}
 
