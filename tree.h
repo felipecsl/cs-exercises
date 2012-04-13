@@ -26,6 +26,7 @@ class tree_node {
 public:
 	typedef typename children_type::const_iterator const_iterator;
 	typedef typename children_type::size_type size_type;
+	typedef typename children_type::value_type value_type;
 	typedef typename children_type::reference reference;
 	typedef typename children_type::const_reference const_reference;
 
@@ -78,8 +79,8 @@ public:
 	T const &value() const { return v; }
 };
 
-template <typename node_type>
-void print_tree(node_type *node) {
+template <typename node_type, typename value_printer>
+void print_tree(node_type *node, value_printer print) {
 	if(!node) return;
 
 	std::cout << '[' << node->value() << ' ';
@@ -98,13 +99,21 @@ void print_tree(node_type *node) {
 			continue;
 		}
 
-		std::cout << '[' << i->first->value() << ' ';
+		std::cout << '[';
+		print(std::cout, i->first->value());
+		std::cout << ' ';
+		
 		auto next = std::make_pair(i.first->node->begin(), node->end());
 		++i->first;
 		s.push(next);
 	}
 
 	std::cout << ']' << std::endl;
+}
+
+template <typename node_type>
+void print_tree(node_type *node) {
+	print_tree(node, [](ostream &out, typename node_type::value_type const &value){ out << value; });
 }
 
 #endif // INCLUDED__tree_h
