@@ -1,5 +1,5 @@
-#include "./14-shuffle.h"
-#include "./random.h"
+#include "../14-shuffle/shuffle.h"
+#include "../prep/random.h"
 
 #include <iostream>
 #include <vector>

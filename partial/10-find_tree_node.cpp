@@ -1,5 +1,5 @@
-#include "./tree.h"
-#include "./random.h"
+#include "../prep/tree.h"
+#include "../prep/random.h"
 
 #include <iostream>
 #include <stack>

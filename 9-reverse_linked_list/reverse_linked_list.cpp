@@ -1,5 +1,5 @@
-#include "./slist.h"
-#include "./random.h"
+#include "../prep/slist.h"
+#include "../prep/random.h"
 
 #include <iostream>
 

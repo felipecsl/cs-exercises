@@ -1,5 +1,5 @@
-#include "69-print_binary_tree.h"
-#include "binary_tree.h"
+#include "../69-print_binary_tree/print_binary_tree.h"
+#include "../prep/binary_tree.h"
 
 #include <algorithm>
 

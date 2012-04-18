@@ -3,27 +3,36 @@
 clear
 set -e
 
-if [ ! -f "$1" ]; then
-	echo "Source $1 not found"
+ename="$1"
+
+if [ -z "$ename" ] || [ ! -d "$ename" ]; then
+	echo "Exercise $ename not found"
 	exit 1
 fi
 
-bname="`basename "$1" .cpp`.bin"
-iname="`basename "$1" .cpp`.input"
+tmpdir="tmp/$ename"
 
-g++ -Wall -std=c++0x -O0 -g -o "$bname" "$1" 2>&1 | more
+if [ -d "$tmpdir" ]; then
+	rm -rf "$tmpdir"
+fi
+mkdir -p "$tmpdir"
+
+bname="$tmpdir/$ename.bin"
+g++ -Wall -std=c++0x -O0 -g -o "$bname" $ename/*.cpp 2>&1 | more
 
 set +e
 if [ -x "$bname" ]; then
 	shift
 	echo "args = $@"
 
-	if [ -e "$iname" ]; then
+	input_found=0
+	for iname in $ename/*.input; do
+		input_found=1
 		echo "Using $iname as stdin"
 		"./$bname" "$@" < "$iname"
-	else
+	done
+
+	if [ ! "$input_found" ]; then
 		"./$bname" "$@"
 	fi
-
-	rm -f "$bname"
 fi

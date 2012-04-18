@@ -1,4 +1,4 @@
-#include "./bitmap_paint.h"
+#include "../prep/bitmap_paint.h"
 
 #include <utility>
 #include <stack>

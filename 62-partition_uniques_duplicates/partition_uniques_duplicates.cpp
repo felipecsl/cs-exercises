@@ -1,4 +1,4 @@
-#include "./random.h"
+#include "../prep/random.h"
 
 #include <iostream>
 #include <vector>

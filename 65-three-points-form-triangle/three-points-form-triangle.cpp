@@ -1,5 +1,5 @@
-#include "./point.h"
-#include "./line.h"
+#include "../prep/point.h"
+#include "../prep/line.h"
 
 #include <iostream>
 #include <vector>
