@@ -10,7 +10,7 @@ private:
 	coord_t m_y;
 
 public:
-	point(coord_t const &x = 0, coord_t const &y = 0):
+	explicit point(coord_t const &x = 0, coord_t const &y = 0):
 		m_x(x),
 		m_y(y)
 	{

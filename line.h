@@ -10,7 +10,7 @@ private:
 	coord_t b;
 
 public:
-	line_equation(coord_t const &m = 0, coord_t const &b = 0):
+	explicit line_equation(coord_t const &m = 0, coord_t const &b = 0):
 		m(m),
 		b(b)
 	{
