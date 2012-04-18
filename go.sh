@@ -3,7 +3,7 @@
 clear
 set -e
 
-ename="$1"
+ename="`basename "$1"`"
 
 if [ -z "$ename" ] || [ ! -d "$ename" ]; then
 	echo "Exercise $ename not found"
@@ -18,21 +18,20 @@ fi
 mkdir -p "$tmpdir"
 
 bname="$tmpdir/$ename.bin"
-g++ -Wall -std=c++0x -O0 -g -o "$bname" $ename/*.cpp 2>&1 | more
+g++-4.7 -Wall -std=c++0x -O0 -g -o "$bname" $ename/*.cpp 2>&1 | more
 
 set +e
 if [ -x "$bname" ]; then
 	shift
 	echo "args = $@"
 
-	input_found=0
-	for iname in $ename/*.input; do
-		input_found=1
-		echo "Using $iname as stdin"
-		"./$bname" "$@" < "$iname"
-	done
-
-	if [ ! "$input_found" ]; then
-		"./$bname" "$@"
+	# TODO: ugly hack, improve it
+	if [ "`find "$ename" -name '*.input'`" ]; then
+		for iname in $ename/*.input; do
+			echo "Using $iname as stdin"
+			"$bname" "$@" < "$iname"
+		done
+	else
+		"$bname" "$@"
 	fi
 fi
