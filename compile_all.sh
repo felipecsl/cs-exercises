@@ -1,7 +1,7 @@
 #!/bin/sh
 
 for f in *; do
-	if [ "`basename "$f"`" != "partial" ] && [ "`basename "$f"`" != "tmp" ] && [ -d "$f" ]; then
+	if [ "`basename "$f"`" != "prep" ] &&  [ "`basename "$f"`" != "partial" ] && [ "`basename "$f"`" != "tmp" ] && [ -d "$f" ]; then
 		./go.sh "$f"
 		echo
 		echo "$f"
