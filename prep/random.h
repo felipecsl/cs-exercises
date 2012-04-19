@@ -14,4 +14,9 @@ unsigned seed_random(unsigned seed = 0) {
 
 	return seed;
 }
+
+unsigned get_random(unsigned ubound, bool inclusive = false) {
+	return rand() % (ubound + inclusive);
+}
+
 #endif // INCLUDED__random_h
