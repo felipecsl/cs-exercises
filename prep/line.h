@@ -18,7 +18,9 @@ public:
 
 	template <typename point_t>
 	line_equation(point_t const &a, point_t const &b):
-		line_equation(a.x(), a.y(), b.x(), b.y())
+		// TODO: Handle infinite tangent
+		m((b.y() - a.y()) / (b.x() - a.x())),
+		b(a.y() - m * a.x())
 	{
 	}
 
