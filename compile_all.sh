@@ -1,7 +1,7 @@
 #!/bin/sh
 
-for f in *; do
-	if [ "`basename "$f"`" != "prep" ] &&  [ "`basename "$f"`" != "partial" ] && [ "`basename "$f"`" != "tmp" ] && [ -d "$f" ]; then
+for f in `ls | grep -P "[0-9]+\-.+"`; do
+	if [ -d "$f" ]; then
 		./go.sh "$f"
 		echo
 		echo "$f"
