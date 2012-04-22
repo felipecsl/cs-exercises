@@ -20,7 +20,7 @@ public:
 	typedef typename array_type::value_type value_type;
 	typedef typename array_type::size_type size_type;
 
-	matrix(size_type width, size_type height, T const &value):
+	matrix(size_type width, size_type height, T const &value = T()):
 		m(width * height, value),
 		w(width),
 		h(height)
