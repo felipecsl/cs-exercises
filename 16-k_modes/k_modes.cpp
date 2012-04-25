@@ -2,10 +2,10 @@
 
 #include <iostream>
 #include <unordered_map>
-#include <unordered_set>
-#include <queue>
-#include <utility>
+#include <set>
 #include <vector>
+#include <utility>
+#include <algorithm>
 #include <functional>
 #include <iterator>
 
@@ -15,15 +15,12 @@ using namespace std;
 
 template <typename T>
 class mode_finder {
-	// an efficient space solution could use a count-sketch like
+	// a space-efficient solution could use a count-sketch-like
 	// data structure, see http://dl.acm.org/citation.cfm?id=684566
-	// this is true specially for counting elements over a stream
-	typedef unordered_map<T, size_t> counter_map;
-
-	counter_map counter;
-	unordered_set<T> elements;
-	typedef pair<size_t, T> entry;
-	priority_queue<entry, vector<entry>, greater<entry>> q;
+	// this is true specially for counting a large amount of elements
+	// not implemented here due to its complexity
+	unordered_map<T, size_t> counter;
+	set<pair<size_t, T>> elements;
 	size_t k;
 
 public:
@@ -40,30 +37,22 @@ public:
 			i = counter.insert(make_pair(value, 1)).first;
 		}
 		else {
+			elements.erase(make_pair(i->second, i->first));
 			++i->second;
 		}
 
-		if(!(elements.size() < k)) {
-			if(i->second <= q.top().first) return;
-
-			auto j = elements.find(value);
-			if(j != elements.end()) return;
-
-			elements.erase(q.top().second);
-			q.pop();
-		}
-
-		elements.insert(value);
-		q.push(make_pair(i->second, value));
+		elements.insert(make_pair(i->second, i->first));
 	}
 
 	vector<T> modes() const {
 		vector<T> result;
 
-		result.reserve(q.size());
+		result.reserve(min(k, elements.size()));
 
-		for(auto c = q; !c.empty(); c.pop()) {
-			result.push_back(c.top().first);
+		auto i = elements.crend();
+
+		for(auto j = result.capacity(); j--; ++i) {
+			result.push_back(i->second);
 		}
 
 		return result;
