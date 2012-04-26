@@ -9,6 +9,8 @@
 #include <functional>
 #include <iterator>
 
+#include <cassert>
+
 using namespace std;
 
 template <typename T>
@@ -35,24 +37,21 @@ public:
 		auto i = counter.find(value);
 
 		if(i == counter.end()) {
-			i = counter.insert(i, 1);
-		{
+			i = counter.insert(make_pair(value, 1)).first;
+		}
 		else {
 			++i->second;
 		}
 
-		if(elements.size() < k) {
-			elements.insert(make_pair(i->second, value));
-			return;
+		if(!(elements.size() < k)) {
+			if(i->second <= q.top().first) return;
+
+			auto j = elements.find(value);
+			if(j != elements.end()) return;
+
+			elements.erase(q.top().second);
+			q.pop();
 		}
-
-		if(i->second <= q.top().first) return;
-
-		auto j = elements.find(value);
-		if(j != elements.end()) return;
-
-		elements.erase(q.top().second);
-		q.pop();
 
 		elements.insert(value);
 		q.push(make_pair(i->second, value));
