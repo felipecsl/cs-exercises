@@ -3,6 +3,8 @@
 #include <iostream>
 #include <unordered_map>
 #include <vector>
+#include <utility>
+#include <tuple>
 #include <algorithm>
 #include <iterator>
 
@@ -133,32 +135,48 @@ pair<iterator, iterator> find_2sum_linear(typename iterator_traits<iterator>::va
 }
 
 template <typename iterator>
-pair<iterator, iterator> find_3sum(typename iterator_traits<iterator>::value_type const &target, iterator begin, iterator end) {
+tuple<iterator, iterator, iterator> find_3sum(typename iterator_traits<iterator>::value_type const &target, iterator begin, iterator end) {
 	sort(begin, end);
 
 	for(auto i = begin; i != end; ++i) {
 		auto result = find_2sum_sorted(target - *i, i + 1, end);
 
 		if(result.second != end && result.first != end) {
-			return result;
+			return make_tuple(i, result.first, result.second);
 		}
 	}
 
-	return make_pair(end, end);
+	return make_pair(end, end, end);
 }
 
 template <typename iterator, typename method_type>
 void test_2sum(typename iterator_traits<iterator>::value_type const &target, iterator begin, iterator end, method_type method) {
 	auto result = method(target, begin, end);
 
-	// ...
+	if(result.second == end || result.first == end) {
+		cout << "no pair that sum up to " << target << " found" << endl
+	}
+	else if(*result.first + *result.second == target) {
+		cout << *result.first << " + " << *result.second << " = " << target << endl;
+	}
+	else {
+		cout "ERROR: " << *result.first << " + " << *result.second << " != " << target << endl;
+	}
 }
 
 template <typename iterator>
 void test_3sum(typename iterator_traits<iterator>::value_type const &target, iterator begin, iterator end) {
 	auto result = find_3sum(target, begin, end);
 
-	// ...
+	if(get<2>(result) == end || get<1>(result) == end || get<0>(result) == end) {
+		cout << "no triplet that sum up to " << target << " found" << endl
+	}
+	else if(*get<0>(result) + *get<1>(result) + *get<2>(result) == target) {
+		cout << *get<0>(result) << " + " << *get<1>(result) << " + " << *get<2>(result) << " = " << target << endl;
+	}
+	else {
+		cout "ERROR: " << *get<0>(result) << " + " << *get<1>(result) << " + " << *get<2>(result) << " != " << target << endl;
+	}
 }
 
 void stdin_test() {
