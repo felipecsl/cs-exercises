@@ -1,7 +1,7 @@
 #include "../prep/random.h"
 
 #include <iostream>
-#include <unordered_set>
+#include <unordered_map>
 #include <vector>
 #include <algorithm>
 #include <iterator>
@@ -13,7 +13,47 @@ using namespace std;
 
 template <typename iterator>
 pair<iterator, iterator> find_2sum_sorted(typename iterator_traits<iterator>::value_type const &target, iterator begin, iterator end) {
-	// ...
+//* faster if the values are slow to sum/subtract
+	if(begin == end || *begin > target) {
+		return make_pair(end, end);
+	}
+
+	for(auto l = begin, r = end - 1; l != r; ) {
+		auto seek = target - *l;
+
+		while(*r > seek) {
+			if(--r == l) {
+				return make_pair(end, end);
+			}
+		}
+
+		if(*r == seek) {
+			return make_pair(l, r);
+		}
+
+		if(*++l > target) break;
+	}
+/*/ // less branches
+	if(begin == end) {
+		return make_pair(end, end);
+	}
+
+	for(auto l = begin, r = end - 1; l != r; ) {
+		auto sum = *l + *r;
+
+		if(sum > target) {
+			--r;
+		}
+		else if(sum < target) {
+			++l;
+		}
+		else {
+			return make_pair(l, r);
+		}
+	}
+//*/
+
+	return make_pair(end, end);
 }
 
 template <typename iterator>
@@ -25,14 +65,86 @@ pair<iterator, iterator> find_2sum(typename iterator_traits<iterator>::value_typ
 
 template <typename iterator>
 pair<iterator, iterator> find_2sum_linear(typename iterator_traits<iterator>::value_type const &target, iterator begin, iterator end) {
-	// ...
+/* slightly more space efficient, at most n/2 space used
+	auto half = target / 2;
+
+	{
+		size_t less = 0;
+		size_t more = 0;
+
+		for(auto i = begin; i != end; ++i) {
+			if(*i > half) ++more;
+			else ++less;
+		}
+	}
+
+	auto chooser = more > less
+		? [=](decltype(target) const &x){ return !(*i > half); }
+		: [=](decltype(target) const &x){ return *i > half; };
+
+	unordered_map<decltype(target), pair<iterator, bool>> table;
+
+	for(auto i = begin; i != end; ++i) {
+		if(!chooser(*i)) continue;
+
+		auto j = table.find(*i);
+
+		if(j == table.end()) {
+			table[*i] = make_pair(i, false);
+		}
+		else {
+			j->second.second = true;
+		}
+	}
+
+	for(auto i = begin; i != end; ++i) {
+		if(chooser(*i)) continue;
+
+		auto complement = target - *i;
+		auto j = table.find(complement);
+
+		if(j != table.end() && (*i != complement || j->second)) {
+			return make_pair(i, j->second.first);
+		}
+	}
+/*/ //simpler
+	unordered_map<decltype(target), pair<iterator, bool>> table;
+
+	for(auto i = begin; i != end; ++i) {
+		auto j = table.find(*i);
+
+		if(j == table.end()) {
+			table[*i] = make_pair(i, false);
+		}
+		else {
+			j->second.second = true;
+		}
+	}
+
+	for(auto i = begin; i != end; ++i) {
+		auto complement = target - *i;
+		auto j = table.find(complement);
+
+		if(j != table.end() && (*i != complement || j->second)) {
+			return make_pair(i, j->second.first);
+		}
+	}
+//*/
 }
 
 template <typename iterator>
 pair<iterator, iterator> find_3sum(typename iterator_traits<iterator>::value_type const &target, iterator begin, iterator end) {
 	sort(begin, end);
 
-	// ...
+	for(auto i = begin; i != end; ++i) {
+		auto result = find_2sum_sorted(target - *i, i + 1, end);
+
+		if(result.second != end && result.first != end) {
+			return result;
+		}
+	}
+
+	return make_pair(end, end);
 }
 
 template <typename iterator, typename method_type>
