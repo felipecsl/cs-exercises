@@ -20,37 +20,37 @@ pair<iterator, iterator> find_2sum_sorted(typename iterator_traits<iterator>::va
 		return make_pair(end, end);
 	}
 
-	for(auto l = begin, r = end - 1; l != r; ) {
-		auto seek = target - *l;
+	for(auto r = end - 1; begin != r; ) {
+		auto seek = target - *begin;
 
 		while(*r > seek) {
-			if(--r == l) {
+			if(--r == begin) {
 				return make_pair(end, end);
 			}
 		}
 
 		if(*r == seek) {
-			return make_pair(l, r);
+			return make_pair(begin, r);
 		}
 
-		if(*++l > target) break;
+		if(*++begin > target) break;
 	}
 /*/ // less branches
 	if(begin == end) {
 		return make_pair(end, end);
 	}
 
-	for(auto l = begin, r = end - 1; l != r; ) {
-		auto sum = *l + *r;
+	for(auto r = end - 1; begin != r; ) {
+		auto sum = *begin + *r;
 
 		if(sum > target) {
 			--r;
 		}
 		else if(sum < target) {
-			++l;
+			++begin;
 		}
 		else {
-			return make_pair(l, r);
+			return make_pair(begin, r);
 		}
 	}
 //*/
@@ -81,10 +81,10 @@ pair<iterator, iterator> find_2sum_linear(typename iterator_traits<iterator>::va
 	}
 
 	auto chooser = more > less
-		? [=](decltype(target) const &x){ return !(*i > half); }
-		: [=](decltype(target) const &x){ return *i > half; };
+		? [=](typename iterator_traits<iterator>::value_type const &x){ return !(*i > half); }
+		: [=](typename iterator_traits<iterator>::value_type const &x){ return *i > half; };
 
-	unordered_map<decltype(target), pair<iterator, bool>> table;
+	unordered_map<typename iterator_traits<iterator>::value_type, pair<iterator, bool>> table;
 
 	for(auto i = begin; i != end; ++i) {
 		if(!chooser(*i)) continue;
@@ -105,12 +105,12 @@ pair<iterator, iterator> find_2sum_linear(typename iterator_traits<iterator>::va
 		auto complement = target - *i;
 		auto j = table.find(complement);
 
-		if(j != table.end() && (*i != complement || j->second)) {
+		if(j != table.end() && (*i != complement || j->second.second)) {
 			return make_pair(i, j->second.first);
 		}
 	}
 /*/ //simpler
-	unordered_map<decltype(target), pair<iterator, bool>> table;
+	unordered_map<typename iterator_traits<iterator>::value_type, pair<iterator, bool>> table;
 
 	for(auto i = begin; i != end; ++i) {
 		auto j = table.find(*i);
@@ -127,11 +127,13 @@ pair<iterator, iterator> find_2sum_linear(typename iterator_traits<iterator>::va
 		auto complement = target - *i;
 		auto j = table.find(complement);
 
-		if(j != table.end() && (*i != complement || j->second)) {
+		if(j != table.end() && (*i != complement || j->second.second)) {
 			return make_pair(i, j->second.first);
 		}
 	}
 //*/
+
+	return make_pair(end, end);
 }
 
 template <typename iterator>
@@ -146,7 +148,7 @@ tuple<iterator, iterator, iterator> find_3sum(typename iterator_traits<iterator>
 		}
 	}
 
-	return make_pair(end, end, end);
+	return make_tuple(end, end, end);
 }
 
 template <typename iterator, typename method_type>
@@ -154,13 +156,13 @@ void test_2sum(typename iterator_traits<iterator>::value_type const &target, ite
 	auto result = method(target, begin, end);
 
 	if(result.second == end || result.first == end) {
-		cout << "no pair that sum up to " << target << " found" << endl
+		cout << "no pair that sum up to " << target << " found" << endl;
 	}
 	else if(*result.first + *result.second == target) {
 		cout << *result.first << " + " << *result.second << " = " << target << endl;
 	}
 	else {
-		cout "ERROR: " << *result.first << " + " << *result.second << " != " << target << endl;
+		cout << "ERROR: " << *result.first << " + " << *result.second << " != " << target << endl;
 	}
 }
 
@@ -169,13 +171,13 @@ void test_3sum(typename iterator_traits<iterator>::value_type const &target, ite
 	auto result = find_3sum(target, begin, end);
 
 	if(get<2>(result) == end || get<1>(result) == end || get<0>(result) == end) {
-		cout << "no triplet that sum up to " << target << " found" << endl
+		cout << "no triplet that sum up to " << target << " found" << endl;
 	}
 	else if(*get<0>(result) + *get<1>(result) + *get<2>(result) == target) {
 		cout << *get<0>(result) << " + " << *get<1>(result) << " + " << *get<2>(result) << " = " << target << endl;
 	}
 	else {
-		cout "ERROR: " << *get<0>(result) << " + " << *get<1>(result) << " + " << *get<2>(result) << " != " << target << endl;
+		cout << "ERROR: " << *get<0>(result) << " + " << *get<1>(result) << " + " << *get<2>(result) << " != " << target << endl;
 	}
 }
 
@@ -193,8 +195,8 @@ void stdin_test() {
 	}
 	cout << endl;
 
-	test_2sum(target, begin(v), end(v), find_2sum);
-	test_2sum(target, begin(v), end(v), find_2sum_linear);
+	test_2sum(target, begin(v), end(v), find_2sum<decltype(begin(v))>);
+	test_2sum(target, begin(v), end(v), find_2sum_linear<decltype(begin(v))>);
 	test_3sum(target, begin(v), end(v));
 }
 
@@ -203,14 +205,14 @@ void random_test(size_t n, int k) {
 
 	cout << "n = " << n
 		<< endl
-		<< " k = " << k
+		<< "k = " << k
 		<< endl;
 
-	auto 2sum_target = get_random(2 * k);
-	cout << "2SUM target: " << target << endl;
+	auto sum2_target = get_random(2 * k);
+	cout << "2SUM target: " << sum2_target << endl;
 
-	auto 3sum_target = get_random(3 * k);
-	cout << "3SUM Target: " << target << endl;
+	auto sum3_target = get_random(3 * k);
+	cout << "3SUM Target: " << sum3_target << endl;
 
 	vector<unsigned> v(n);
 	cout << "Input:";
@@ -220,18 +222,17 @@ void random_test(size_t n, int k) {
 	}
 	cout << endl;
 
-	test_2sum(2sum_target, begin(v), end(v), find_2sum);
-	test_2sum(2sum_target, begin(v), end(v), find_2sum_linear);
-	test_3sum(3sum_target, begin(v), end(v));
+	test_2sum(sum2_target, begin(v), end(v), find_2sum<decltype(begin(v))>);
+	test_2sum(sum2_target, begin(v), end(v), find_2sum_linear<decltype(begin(v))>);
+	test_3sum(sum3_target, begin(v), end(v));
 }
 
 int main(int argc, char **argv) {
 	cout << "Seed: " << seed_random(argc > 3 ? atoi(argv[3]) : 0) << endl;
 
-	random_test(
-		argc > 1 ? atoi(argv[1]) : 20,
-		argc > 2 ? atoi(argv[2]) : (sqrt(n) * 2)
-	);
+	auto n = argc > 1 ? atoi(argv[1]) : 20;
+
+	random_test(n, argc > 2 ? atoi(argv[2]) : n);
 
 	cout << endl;
 
