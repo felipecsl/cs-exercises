@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <utility>
 #include <tuple>
@@ -216,8 +217,9 @@ void random_test(size_t n, int k) {
 
 	vector<unsigned> v(n);
 	cout << "Input:";
-	while(n--) {
-		v[n] = get_random(k);
+	for(unordered_set<decltype(v)::value_type> used; n--; ) {
+		while(used.find(v[n] = get_random(k)) != used.end());
+		used.insert(v[n]);
 		cout << ' ' << v[n];
 	}
 	cout << endl;
@@ -230,11 +232,14 @@ void random_test(size_t n, int k) {
 int main(int argc, char **argv) {
 	cout << "Seed: " << seed_random(argc > 3 ? atoi(argv[3]) : 0) << endl;
 
-	auto n = argc > 1 ? atoi(argv[1]) : 20;
+	auto n = argc > 1 ? atoi(argv[1]) : 10;
 
-	random_test(n, argc > 2 ? atoi(argv[2]) : n);
+	random_test(n, argc > 2 ? atoi(argv[2]) : 2 * n);
 
 	cout << endl;
 
 	stdin_test();
+
+	cout << endl;
+	cout << endl;
 }
