@@ -57,4 +57,49 @@ std::unique_ptr<sl_node<int>> build_slist(size_t n, int ubound = 100) {
 	return head;
 }
 
+unique_ptr<sl_node<int>> build_cyclic_list(size_t size, size_t cycleAt) {
+	assert(size > 0);
+	assert(cycleAt < size);
+
+	unique_ptr<sl_node<int>> head(new sl_node<int>(0));
+
+	cout << "List: " << head->value();
+
+	sl_node *last = head.get();
+	sl_node *start = head.get();
+
+	while(--size) {
+		last = head.next(new sl_node<int>(last->value() + 1));
+		cout << ' ' << last->value();
+
+		if(cycle) {
+			start = last;
+			--cycle;
+		}
+	}
+	cout << endl;
+
+	last->next(start);
+
+	return head;
+}
+
+template <typename node_type>
+void print_list(node_type const *head, char const *message) {
+	cout << message;
+	for(; head; head = head->next()) {
+		cout << ' ' << head->value();
+	}
+	cout << endl;
+}
+
+template <typename node_type>
+void print_list(node_type const *head, size_t size, char const *message) {
+	cout << message;
+	for(++size; head && size--; head = head->next()) {
+		cout << ' ' << head->value();
+	}
+	cout << endl;
+}
+
 #endif // INCLUDED__slist_h
