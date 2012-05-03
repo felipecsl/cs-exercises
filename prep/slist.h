@@ -11,9 +11,11 @@ it's only intended for exercising purposes\n\
 ******************************************\n\
 "
 
+#include <iostream>
 #include <memory>
 
 #include <cstdlib>
+#include <cassert>
 
 template <typename T>
 class sl_node {
@@ -40,7 +42,7 @@ public:
 };
 
 using namespace std;
-std::unique_ptr<sl_node<int>> build_slist(size_t n, int ubound = 100) {
+std::unique_ptr<sl_node<int>> build_list(size_t n, int ubound = 100) {
 	if(!n) {
 		return std::unique_ptr<sl_node<int>>();
 	}
@@ -57,49 +59,50 @@ std::unique_ptr<sl_node<int>> build_slist(size_t n, int ubound = 100) {
 	return head;
 }
 
-unique_ptr<sl_node<int>> build_cyclic_list(size_t size, size_t cycleAt) {
+template <typename output>
+unique_ptr<sl_node<int>> build_cyclic_list(size_t size, size_t cycleAt, output &out) {
 	assert(size > 0);
 	assert(cycleAt < size);
 
 	unique_ptr<sl_node<int>> head(new sl_node<int>(0));
 
-	cout << "List: " << head->value();
+	out << "List: " << head->value();
 
-	sl_node *last = head.get();
-	sl_node *start = head.get();
+	auto last = head.get();
+	auto start = head.get();
 
 	while(--size) {
-		last = head.next(new sl_node<int>(last->value() + 1));
-		cout << ' ' << last->value();
+		last = last->next(new sl_node<int>(last->value() + 1));
+		out << ' ' << last->value();
 
-		if(cycle) {
+		if(cycleAt) {
 			start = last;
-			--cycle;
+			--cycleAt;
 		}
 	}
-	cout << endl;
+	out << std::endl;
 
 	last->next(start);
 
 	return head;
 }
 
-template <typename node_type>
-void print_list(node_type const *head, char const *message) {
-	cout << message;
+template <typename node_type, typename output>
+void print_list(node_type const *head, char const *message, output &out) {
+	out << message;
 	for(; head; head = head->next()) {
-		cout << ' ' << head->value();
+		out << ' ' << head->value();
 	}
-	cout << endl;
+	out << endl;
 }
 
-template <typename node_type>
-void print_list(node_type const *head, size_t size, char const *message) {
-	cout << message;
-	for(++size; head && size--; head = head->next()) {
-		cout << ' ' << head->value();
+template <typename node_type, typename output>
+void print_list(node_type const *head, size_t size, char const *message, output &out) {
+	out << message;
+	for(; head && size--; head = head->next()) {
+		out << ' ' << head->value();
 	}
-	cout << endl;
+	out << std::endl;
 }
 
 #endif // INCLUDED__slist_h

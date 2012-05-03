@@ -30,11 +30,19 @@ int main() {
 		return 3;
 	}
 
-	auto head = make_cyclic_list(size, cycle);
-	print_list(head.get(), size, "Cyclic list");
+	auto head = build_cyclic_list(size, cycle, cout);
+	print_list(head.get(), size * 2, "Cyclic list", cout);
 
-	auto cyclic = break_cycle(head);
-	print_list(head.get(), "Non-cyclic list");
+	auto cyclic = break_cycle(head.get());
+	cout << (cyclic ? "Cycle broken" : "No cycle detected") << endl;
+	print_list(head.get(), "Non-cyclic list", cout);
+
+	auto i = head->value();
+	for(auto node = head.get(); node; node = node->next(), ++i) {
+		assert(i == node->value());
+	}
+	assert(static_cast<decltype(size)>(i) == size);
+	cout << "Resulting list is CORRECT" << endl;
 
 	return 0;
 }

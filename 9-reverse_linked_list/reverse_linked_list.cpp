@@ -33,7 +33,7 @@ node_type *reverse_slist(node_type *node) {
 int main(int argc, char **argv) {
 	cout << "Seed: " << seed_random(argc > 2 ? atoi(argv[2]) : 0) << endl;
 
-	auto list = build_slist(argc > 1 ? atoi(argv[1]) : 10);
+	auto list = build_list(argc > 1 ? atoi(argv[1]) : 10);
 
 	cout << "Input list:" << endl;
 	for(auto node = list.get(); node; node = node->next()) {

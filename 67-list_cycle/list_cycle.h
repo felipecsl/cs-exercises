@@ -6,16 +6,15 @@
 template <typename node_type>
 node_type *find_cycle(node_type *head) {
 	node_type *prev = 0;
+	auto slow = head;
+	auto fast = head;
 
-	for(auto slow = head, fast = head; fast && fast->next(); ) {
+	while(fast && fast->next()) {
 		fast = fast->next()->next();
 		prev = slow;
 		slow = slow->next();
 
-		if(slow == fast) {
-			cyclic = true;
-			break;
-		}
+		if(slow == fast) break;
 	}
 
 	if(!prev || slow != fast) return 0;

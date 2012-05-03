@@ -24,12 +24,14 @@ set +e
 if [ -x "$bname" ]; then
 	shift
 	echo "args = $@"
+	echo
 
 	# TODO: ugly hack, improve it
 	if [ "`find "$ename" -name '*.input'`" ]; then
 		for iname in $ename/*.input; do
 			echo "Using $iname as stdin"
 			"$bname" "$@" < "$iname"
+			echo
 		done
 	else
 		"$bname" "$@"
