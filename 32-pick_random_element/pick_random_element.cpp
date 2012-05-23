@@ -4,6 +4,8 @@
 #include <vector>
 #include <iterator>
 
+#include <cstdlib>
+
 using namespace std;
 
 template <typename iterator>
