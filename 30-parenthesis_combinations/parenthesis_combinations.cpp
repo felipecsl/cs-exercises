@@ -18,7 +18,7 @@ class generate_balanced_parenthesis {
 
 	void generate(size_t open, size_t position) {
 		if(position == buffer.size()) {
-			out(buffer, 0);
+			out(buffer);
 			return;
 		}
 
@@ -46,7 +46,7 @@ public:
 	}
 
 	void operator () {
-		generate(0, 0, 0);
+		generate(0, 0);
 	}
 };
 void generate_balanced_parenthesis() {
@@ -59,12 +59,11 @@ void  {
 }
 
 int main(int argc, char **argv) {
-	generate_balanced_parenthesis(
-		[](string const &s, size_t depth) {
-			cout << s << ", depth = " << depth << endl;
-		},
-		argc > 1 ? atoi(argv[1]) : 3
-	);
+	auto out = [](string const &s) { cout << s << endl; };
+
+	generate_balanced_parenthesis<decltype(out)>(
+		out, argc > 1 ? atoi(argv[1]) : 3
+	)();
 
 	return 0;
 }
