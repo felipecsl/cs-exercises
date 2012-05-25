@@ -8,6 +8,7 @@
 #include <stack>
 
 #include <cstdlib>
+#include <cmath>
 #include <cassert>
 
 using namespace std;
@@ -23,7 +24,7 @@ template <typename node_type>
 void recursive_reverse_print_list(node_type *node) {
 	if(!node) return;
 
-	recursive_reverse_print_list(node->next);
+	recursive_reverse_print_list(node->next());
 
 	cout << ' ' << node->value();
 }
@@ -74,28 +75,28 @@ void sublinear_mem_subquadratic_speed_reverse_print_list(node_type *node) {
 		++size;
 	}
 
-	size_t sqrt_n = sqrt(n);
-	vector<node_type *> index(sqrt_n);
+	vector<node_type *> index(ceil(sqrt(size)));
+	size_t sqrt_n = sqrt(size);
 
 	auto i = node;
 	for(size_t k = 0, j = 0, next = 0; k < size; ++k, i = i->next()) {
 		assert(i);
 
 		if(k == next) {
-			assert(j <= index.size());
+			assert(j < index.size());
 
 			next += sqrt_n;
 			index[j++] = i;
 		}
 	}
 
-	for(auto k = size; n--; ) {
-		size_t j = sqrt(k);
+	for(auto k = size; k--; ) {
+		size_t j = k / sqrt_n;
 		assert(j < index.size());
 
 		i = index[j];
 
-		for(auto l = j * j; l < k; ++l) {
+		for(j *= sqrt_n; j < k; ++j) {
 			assert(i);
 			i = i->next();
 		}
@@ -116,24 +117,24 @@ int main(int argc, char **argv) {
 	}
 	cout << endl;
 
-	cout << "Reversed list:" << endl;
-	reverse_print_modifiable_list(list.get());
-	cout << endl;
-
-	cout << "Reversed list:" << endl;
+	cout << "recursive_reverse_print_list:" << endl;
 	recursive_reverse_print_list(list.get());
 	cout << endl;
 
-	cout << "Reversed list:" << endl;
+	cout << "reverse_print_list:" << endl;
 	reverse_print_list(list.get());
 	cout << endl;
 
-	cout << "Reversed list:" << endl;
+	cout << "constant_memory_reverse_print_list:" << endl;
 	constant_memory_reverse_print_list(list.get());
 	cout << endl;
 
-	cout << "Reversed list:" << endl;
+	cout << "sublinear_mem_subquadratic_speed_reverse_print_list:" << endl;
 	sublinear_mem_subquadratic_speed_reverse_print_list(list.get());
+	cout << endl;
+
+	cout << "reverse_print_modifiable_list:" << endl;
+	reverse_print_modifiable_list(list.get());
 	cout << endl;
 
 	return 0;
