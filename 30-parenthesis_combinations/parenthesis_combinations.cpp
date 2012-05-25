@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <string>
 
 #include <cstdlib>
@@ -13,59 +12,62 @@ template <
 	char_type opening = '(',
 	char_type closing = ')'
 >
-class generate_balanced_parenthesis {
-	fn_output out;
-	string buffer;
-	size_t pairs;
+void generate_balanced_parenthesis(fn_output out, size_t pairs) {
+	struct generator {
+		fn_output out;
+		string buffer;
+		size_t pairs;
+		size_t maxDepth;
 
-	void generate(size_t open, size_t position) {
-		if(position == buffer.size()) {
-			out(buffer);
-			return;
+		void generate(size_t open = 0, size_t closed = 0, size_t position = 0, size_t depth = 0) {
+			if(depth > maxDepth) {
+				maxDepth = depth;
+			}
+
+			if(position == buffer.size()) {
+				out(buffer, maxDepth);
+				return;
+			}
+
+			if(open < pairs) {
+				assert(depth < pairs);
+				size_t prev = maxDepth;
+
+				buffer[position] = opening;
+				generate(open + 1, closed, position + 1, depth + 1);
+
+				if(prev < maxDepth) {
+					maxDepth = prev;
+				}
+			}
+			else {
+				assert(open == pairs);
+			}
+
+			if(closed < open) {
+				assert(depth);
+
+				buffer[position] = closing;
+				generate(open, closed + 1, position + 1, depth - 1);
+			}
+			else {
+				assert(closed == open);
+			}
 		}
+	};
 
-		if(position < buffer.size() - 1) {
-			buffer[position] = opening;
-			generate(open + 1, position + 1);
-		}
-		else {
-			assert(open == buffer.size() / 2);
-		}
-
-		if(open > 0) {
-			buffer[position] = closing;
-			generate(open - 1, position + 1);
-		}
-	}
-
-public:
-	generate_balanced_parenthesis(fn_output out, size_t pairs):
-		out(out),
-		buffer(pairs * 2),
-		pairs(pairs)
-	{
-		assert(pairs > 0);
-	}
-
-	void operator () {
-		generate(0, 0);
-	}
-};
-void generate_balanced_parenthesis() {
-	vector<char> buffer(pairs * 2);
-}
-
-template <typename fn_output>
-void  {
-	vector<char> buffer(pairs * 2);
+	generator g{out, string(pairs * 2, char_type(0)), pairs, 0};
+	g.generate();
 }
 
 int main(int argc, char **argv) {
-	auto out = [](string const &s) { cout << s << endl; };
+	auto out = [](string const &s, size_t maxDepth) {
+		cout << s << ", maximum depth = " << maxDepth << endl;
+	};
 
 	generate_balanced_parenthesis<decltype(out)>(
 		out, argc > 1 ? atoi(argv[1]) : 3
-	)();
+	);
 
 	return 0;
 }
