@@ -7,7 +7,7 @@
 
 #include <cstddef>
 
-template <typedef node_type>
+template <typename node_type>
 class find_bst_kth_element {
 	std::function<node_type const *(node_type const *)> getLeft;
 	std::function<node_type const *(node_type const *)> getRight;
@@ -47,7 +47,7 @@ public:
 
 		std::stack<decltype(node)> s;
 
-		while() {
+		while(true) {
 			if(node) {
 				s.push(node);
 				node = getLeft(node);
