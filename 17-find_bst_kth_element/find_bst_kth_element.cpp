@@ -26,6 +26,8 @@ void test(bst_node<int> const *node, bst_node<int> const *kth, size_t k, size_t 
 	cout << "expected = " << expected << endl;
 
 	assert(kth->value() == expected);
+
+	cout << endl;
 }
 
 void test(bst_node<int> const *node, size_t size, bool max) {
