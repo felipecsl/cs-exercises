@@ -20,6 +20,9 @@ void generate_balanced_parenthesis(fn_output out, size_t pairs) {
 		size_t maxDepth;
 
 		void generate(size_t open = 0, size_t closed = 0, size_t position = 0, size_t depth = 0) {
+			assert(open <= pairs);
+			assert(closed <= open);
+
 			if(depth > maxDepth) {
 				maxDepth = depth;
 			}
@@ -40,18 +43,12 @@ void generate_balanced_parenthesis(fn_output out, size_t pairs) {
 					maxDepth = prev;
 				}
 			}
-			else {
-				assert(open == pairs);
-			}
 
 			if(closed < open) {
 				assert(depth);
 
 				buffer[position] = closing;
 				generate(open, closed + 1, position + 1, depth - 1);
-			}
-			else {
-				assert(closed == open);
 			}
 		}
 	};
