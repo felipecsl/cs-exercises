@@ -66,4 +66,6 @@ int main(int argc, char **argv) {
 
 		test(tree.get());
 	}
+
+	return 0;
 }
