@@ -94,9 +94,9 @@ class Node
   end
 end
 
+############################################
+
 bst = BST.new(0.upto(20).map { |i| (rand() * 100).to_i }.uniq)
 bst.preorder_walk
 p "Min = " + bst.min.to_s
 p "Max = " + bst.max.to_s
-search = (rand() * 100).to_i
-p "Search for #{search} = " + bst.search(search).to_s
