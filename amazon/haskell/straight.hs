@@ -1,7 +1,3 @@
-# Write a method that returns whether the set of cards provided in an integer array is a
-# poker straight or not.
-# http://en.wikipedia.org/wiki/List_of_poker_hands#Straight
-
 straight :: (Num a, Ord a) => [a] -> Bool
 straight [] = False
 straight [x] = True
